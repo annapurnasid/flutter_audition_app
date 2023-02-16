@@ -1,16 +1,7 @@
 # flutter_audition_app
 
-A new Flutter project.
+This flutter project has very basic implementation of **shared preferences.**
+- Data is input in the text field.
+- stored in shared preference when **save data** is clicked
+- has a demo to remove data from shared preferences. Data is removed and text fields are accordxingly updated
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
