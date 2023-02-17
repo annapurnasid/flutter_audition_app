@@ -11,42 +11,53 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Audition Data'),
+          ),
+          body: const MyCustomForm(),
+        ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyCustomForm extends StatefulWidget {
+  const MyCustomForm({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyCustomForm> createState() => _MyCustomFormState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final _nameController = TextEditingController();
+class _MyCustomFormState extends State<MyCustomForm> {
+  late String _nameData;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Audition Data'),
-      ),
-      body: Column(children: <Widget>[
-        TextField(
-          controller: _nameController,
+    return Form(
+      key: _formKey,
+      child: Column(children: <Widget>[
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            _nameData = value;
+            return null;
+          },
           decoration: const InputDecoration(labelText: 'Name'),
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Details(value: _nameController.text)));
+            if (_formKey.currentState!.validate()) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Details(value: _nameData)));
+            }
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber, foregroundColor: Colors.black),
-          child: const Text('Details Page'),
+          child: const Text('Send Data'),
         ),
       ]),
     );
