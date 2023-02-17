@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_audition_app/details.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,15 +27,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    // fetch data from shared pref and populate the app on launch
-    populateDetails();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,58 +39,16 @@ class _MyHomePageState extends State<MyHomePage> {
           controller: _nameController,
           decoration: const InputDecoration(labelText: 'Name'),
         ),
-        TextField(
-          keyboardType: TextInputType.number,
-          controller: _ageController,
-          decoration: const InputDecoration(labelText: 'Your Age'),
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly
-          ],
-        ),
         ElevatedButton(
-          onPressed: () async {
-            setDetails();
-            // getDetails();
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Details(value: _nameController.text)));
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber, foregroundColor: Colors.black),
-          child: const Text('Save Data'),
-        ),
-        ElevatedButton(
-          // Example to remove data from shared pref
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-
-            // Removes the value as well as key
-            await prefs.remove('age');
-
-            // to show that age is removed.
-            populateDetails();
-          },
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber, foregroundColor: Colors.black),
-          // Example to remove data from shared pref
-          child: const Text('Remove age'),
+          child: const Text('Details Page'),
         ),
       ]),
     );
-  }
-
-  // Save data to shared preferences
-  Future setDetails() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString('name', _nameController.text);
-    prefs.setInt('age', int.parse(_ageController.text));
-  }
-
-  // fetch data from shared pref and populate the fields
-  void populateDetails() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _nameController.text = prefs.getString('name')!;
-      _ageController.text =
-          prefs.getInt('age') != null ? prefs.getInt('age').toString() : '0';
-    });
   }
 }
